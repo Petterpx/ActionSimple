@@ -20,14 +20,14 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-#      - name: Grant execute permission for gradlew
-#        run: chmod +x gradlew
-#      - name: Build with Gradle
-#        run: ./gradlew build
+      #      - name: Grant execute permission for gradlew
+      #        run: chmod +x gradlew
+      #      - name: Build with Gradle
+      #        run: ./gradlew build
 
       - name: echo token
         env:
-          token:${{secrets.FIR_TOKEN}}
+          token: ${{secrets.FIR_TOKEN}}
         run: |
-          echo "-token:${secrets.FIR_TOKEN}"
-          echo "2222-----token:$token"
+          echo "-token: ${{ secrets.FIR_TOKEN }}"
+          echo "2222-----token: $token"
