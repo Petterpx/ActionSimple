@@ -27,7 +27,7 @@ jobs:
 
       - name: echo token
         env:
-          token:${{secrets.fir_token}}
+          token:${{secrets.FIR_TOKEN}}
         run: |
-          echo "-token:${secrets.fir_token}"
+          echo "-token:${secrets.FIR_TOKEN}"
           echo "2222-----token:$token"
