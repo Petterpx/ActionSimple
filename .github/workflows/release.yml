@@ -2,7 +2,7 @@ name: Android Release
 
 on:
   release:
-    types: [ published ]
+    types: [ created ]
 
 jobs:
   build:
@@ -11,8 +11,5 @@ jobs:
 
     steps:
       #...
-      - name: Build with Gradle
-        env:
-          VERSION_NAME: ${{ github.event.release.tag_name }}
-
-        run: ./gradlew assembleDebug -PversionName=$VERSION_NAME
+      - name: echo message
+        run: echo "我免费了:)"
