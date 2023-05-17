@@ -10,7 +10,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-
+    env:
+      OUTPUT_DIR: app/build/outputs/apk/debug
+      FIR_TOKEN: ${{ secrets.FIR_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: set up JDK 17
@@ -20,14 +22,21 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      #      - name: Grant execute permission for gradlew
-      #        run: chmod +x gradlew
-      #      - name: Build with Gradle
-      #        run: ./gradlew build
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
 
-      - name: echo token
-        env:
-          token: ${{secrets.FIR_TOKEN}}
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.0'
+          bundler-cache: true
+      - name: Install fir-cli
+        continue-on-error: true
+        run: gem install fir-cli
+      - name: Upload to Fir
+        continue-on-error: true
+        id: fir-upload
         run: |
-          echo "-token: ${{ secrets.FIR_TOKEN }}"
-          echo "2222-----token: $token"
+          fir login $FIR_TOKEN
+          fir publish $OUTPUT_DIR/*.apk

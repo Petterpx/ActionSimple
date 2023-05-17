@@ -14,3 +14,28 @@ dependencyResolutionManagement {
 }
 rootProject.name = "ActionSimple"
 include ':app'
+
+// 使用git的commit记录当做versionCode
+static def gitVersionCode() {
+    def cmd = 'git rev-list HEAD --count'
+    return cmd.execute().text.trim().toInteger()
+}
+
+// 使用git的tag作为versionName
+static def gitVersionTag() {
+    // 获取所有分支里最新的tag
+    def commit = 'git rev-list --tags --max-count=1'
+    def cmd = "git describe --tags ${commit.execute().text}"
+    def version = cmd.execute().text.trim()
+    return version
+}
+
+gradle.projectsLoaded { proj ->
+    def rootProject = proj.gradle.rootProject
+    def rootProjectExt = rootProject.ext
+    def versionName = rootProject.findProperty("versionName")
+    def versionCode = rootProject.findProperty("versionCode")
+    rootProjectExt.versionCode = (versionCode == null || versionCode == "") ? gitVersionCode() : versionCode as int
+    rootProjectExt.versionName = (versionName == null || versionName == "") ? gitVersionTag() : versionName
+    println "versionName:$rootProjectExt.versionName,versionCode:$rootProjectExt.versionCode"
+}
